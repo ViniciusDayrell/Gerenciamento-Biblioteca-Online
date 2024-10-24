@@ -4,13 +4,13 @@ public abstract class Livro {
     private String titulo;
     private String autor;
     private int anoPublicacao;
-    private boolean disponibilidade;
+    private boolean disponivel;
 
-    public Livro(String titulo, String autor, int anoPublicacao, boolean disponibilidade) {
+    public Livro(String titulo, String autor, int anoPublicacao, boolean disponivel) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
-        this.disponibilidade = disponibilidade;
+        this.disponivel = disponivel;
     }
 
     public String getTitulo() {
@@ -37,12 +37,12 @@ public abstract class Livro {
         this.anoPublicacao = anoPublicacao;
     }
 
-    public boolean isDisponibilidade() {
-        return disponibilidade;
+    public boolean isDisponivel() {
+        return disponivel;
     }
 
-    public void setDisponibilidade(boolean disponibilidade) {
-        this.disponibilidade = disponibilidade;
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 
     public abstract String exibirDetalhes();

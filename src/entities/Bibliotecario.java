@@ -11,11 +11,12 @@ import java.util.ArrayList;
  * Atualiza o valor do atributo disponibilidade na classe livro
  */
 public class Bibliotecario extends Usuario {
-    private List<Livro> livrosEmprestados = new ArrayList<>();
+    private List<Emprestimo> emprestimosConcluidos;
     private Biblioteca biblioteca;
 
     public Bibliotecario(String nome, String cpf, String email, String senha) {
         super(nome, cpf, email, senha);
+        this.emprestimosConcluidos = new ArrayList<>();
     }
 
     // Cadastro de livros
@@ -24,15 +25,41 @@ public class Bibliotecario extends Usuario {
     }
 
     // Buscar livro
-    public void buscaLivro(String tituloLivro) {
+    public Livro buscaLivro(String tituloLivro) {
         Livro livro = biblioteca.buscaLivroPorTitulo(tituloLivro);
         if (livro == null) {
             System.out.println("O livro nao existe no catalago!");
-        } else if (livro.isDisponibilidade() == false) {
+        } else if (livro.isDisponivel() == false) {
             System.out.println("O livro esta emprestado!");
         } else {
             System.out.println("O livro esta no catalago e disponivel para emprestimo!");
         }
+        return livro;
+    }
+
+    // Gerencia emprestimos
+    public void gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo) {
+        if (livro.isDisponivel()) {
+            Emprestimo emprestimo = new Emprestimo(livro, usuario, dataEmprestimo);
+            emprestimo.realizarEmprestimo();
+            emprestimosConcluidos.add(emprestimo);
+        } else {
+            System.out.println("O livro nao esta disponivel!");
+        }
+    }
+
+    // Gerencia Devolucao
+    public void gerenciarDevolucao(Livro livro, Usuario usuario, String dataDevolucao) {
+        for (Emprestimo emprestimo : emprestimosConcluidos) {
+            if (emprestimo.getLivro().equals(livro) && emprestimo.getUsuario().equals(usuario)) {
+                emprestimo.calcularMulta(livro, dataDevolucao);
+                emprestimo.devolverLivro();
+                emprestimosConcluidos.remove(emprestimo);
+
+                return;
+            }
+        }
+        System.out.println("Nenhum emprestimo encontrado!");
     }
 
 }
