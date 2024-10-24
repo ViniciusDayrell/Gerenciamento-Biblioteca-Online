@@ -17,7 +17,7 @@ public class Biblioteca {
         this.usuarios = usuarios;
     }
 
-    public void registrarLivro(Livro livro) {
+    protected void registrarLivro(Livro livro) {
         livros.add(livro);
         System.out.println("Livro registrado com sucesso!");
     }
@@ -25,6 +25,15 @@ public class Biblioteca {
     public void cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);
         System.out.println("Usuario cadastrado com sucesso!");
+    }
+
+    public Livro buscaLivroPorTitulo(String titulo) {
+        for (Livro livro : livros) {
+            if (livro.getTitulo().equals(titulo)) {
+                return livro;
+            }
+        }
+        return null;
     }
 
 }
