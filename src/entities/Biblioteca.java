@@ -36,4 +36,16 @@ public class Biblioteca {
         return null;
     }
 
+    public Usuario buscaUsuarioCpf(String cpf) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getCpf().equals(cpf)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public boolean listaVazia() {
+        return usuarios.isEmpty();
+    }
 }

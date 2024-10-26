@@ -6,11 +6,11 @@ public abstract class Livro {
     private int anoPublicacao;
     private boolean disponivel;
 
-    public Livro(String titulo, String autor, int anoPublicacao, boolean disponivel) {
+    public Livro(String titulo, String autor, int anoPublicacao) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
-        this.disponivel = disponivel;
+        this.disponivel = true;
     }
 
     public String getTitulo() {

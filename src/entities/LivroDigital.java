@@ -4,9 +4,9 @@ public class LivroDigital extends Livro {
     private String formato;
     private int tamanho;
 
-    public LivroDigital(String titulo, String autor, int anoPublicacao, boolean disponibilidade, String formato,
+    public LivroDigital(String titulo, String autor, int anoPublicacao, String formato,
             int tamanho) {
-        super(titulo, autor, anoPublicacao, disponibilidade);
+        super(titulo, autor, anoPublicacao);
         this.formato = formato;
         this.tamanho = tamanho;
     }

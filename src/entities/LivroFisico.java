@@ -4,9 +4,9 @@ public class LivroFisico extends Livro {
     private int estante;
     private int pratileira;
 
-    public LivroFisico(String titulo, String autor, int anoPublicacao, boolean disponibilidade, int estante,
+    public LivroFisico(String titulo, String autor, int anoPublicacao, int estante,
             int pratileira) {
-        super(titulo, autor, anoPublicacao, disponibilidade);
+        super(titulo, autor, anoPublicacao);
         this.estante = estante;
         this.pratileira = pratileira;
     }
