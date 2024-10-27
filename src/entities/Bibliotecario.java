@@ -3,13 +3,6 @@ package entities;
 import java.util.List;
 import java.util.ArrayList;
 
-/*
- * Gerencia os emprestimos e o catalago dos livros
- * Gerenciar catalago: Cadastro de livros, alteração da localização do livro
- * Deve verificar a disponibilidade do livro, se disponivel(true), empresta
- * Se nao (false), nao eh possivel emprestar
- * Atualiza o valor do atributo disponibilidade na classe livro
- */
 public class Bibliotecario extends Usuario {
     private List<Emprestimo> emprestimosConcluidos;
     private Biblioteca biblioteca;
@@ -45,19 +38,24 @@ public class Bibliotecario extends Usuario {
         }
     }
 
-    // Gerencia Devolucao
-    public void gerenciarDevolucao(String titulo, String nome, String dataDevolucao) {
-        for (Emprestimo emprestimo : emprestimosConcluidos) {
-            // Compara atributos específicos de Livro e Usuario
-            if (emprestimo.getLivro().getTitulo().equals(titulo) &&
-                    emprestimo.getUsuario().getCpf().equals(nome)) {
+    public void gerenciarDevolucao2(String titulo, String cpf, String dataDevolucao) {
+        Livro livro = biblioteca.buscaLivroPorTitulo(titulo);
+        Usuario usuario = biblioteca.buscaUsuarioCpf(cpf);
+        if (livro == null) {
+            System.out.println("Livro nao encontrado no catalago.");
+            return;
+        }
 
-                // Realiza a devolução
+        if (usuario == null) {
+            System.out.println("Usuario nao encontrado.");
+            return;
+        }
+
+        for (Emprestimo emprestimo : emprestimosConcluidos) {
+            if (emprestimo.getLivro().equals(livro)) {
                 emprestimo.devolverLivro();
                 emprestimosConcluidos.remove(emprestimo);
-                System.out.println("Devolução realizada com sucesso!");
-
-                return; // Finaliza o método após remover o empréstimo
+                return;
             }
         }
         System.out.println("Nenhum empréstimo encontrado!");

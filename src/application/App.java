@@ -1,5 +1,12 @@
 package application;
 
+/*
+ * Correção da funcao Devolucao
+ * Criar tratamento de erros como:
+ * Usuarios iguais nao podem ser cadastrados
+ * Usuario nao cadastrado nao pode emprestar nem devolver livro
+ * Livros iguais nao podem ser cadastrados
+ */
 import java.util.Scanner;
 
 import entities.Biblioteca;
@@ -135,7 +142,7 @@ public class App {
                         System.out.printf("Data do emprestimo: ");
                         String dataEmprestimo = sc.nextLine();
                         bibliotecario.gerenciarEmprestimos(biblioteca.buscaLivroPorTitulo(buscaTitulo),
-                                biblioteca.buscaUsuarioCpf(cpf), dataEmprestimo);
+                                biblioteca.buscaUsuarioCpf(cpfUsuario), dataEmprestimo);
                     }
                     break;
 
@@ -154,7 +161,7 @@ public class App {
                     } else {
                         System.out.printf("Data da devolucao: ");
                         String dataDevolucao = sc.nextLine();
-                        bibliotecario.gerenciarDevolucao(buscaTitulo2,
+                        bibliotecario.gerenciarDevolucao2(buscaTitulo2,
                                 cpfUsuario2, dataDevolucao);
                     }
                     break;
@@ -200,6 +207,10 @@ public class App {
                         System.out.println("Livro encontrado:");
                         System.out.println(livro.exibirDetalhes());
                     }
+                    break;
+
+                case 6:
+                    System.out.println("Encerrando o sistema... Obrigado por usar a Biblioteca!");
                     break;
 
                 default:
