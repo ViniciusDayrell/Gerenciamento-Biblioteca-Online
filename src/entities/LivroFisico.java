@@ -29,7 +29,16 @@ public class LivroFisico extends Livro {
 
     @Override
     public String exibirDetalhes() {
-        return " ";
+        return "Titulo: "
+                + getTitulo()
+                + ", Autor: "
+                + getAutor()
+                + ", Ano de publicacao: "
+                + getAnoPublicacao()
+                + ", Estante: "
+                + getEstante()
+                + ", Pratileira: "
+                + getPratileira();
     }
 
 }

@@ -25,6 +25,15 @@ public class Bibliotecario extends Usuario {
         biblioteca.registrarLivro(livro);
     }
 
+    // Mostra os status dos livros
+    public void mostrarLivrosDisponiveis() {
+        biblioteca.listarLivrosDisponiveis();
+    }
+
+    public void mostrarLivrosEmprestados() {
+        biblioteca.listarLivrosEmprestados();
+    }
+
     // Gerencia emprestimos
     public void gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo) {
         if (livro.isDisponivel()) {
@@ -37,17 +46,21 @@ public class Bibliotecario extends Usuario {
     }
 
     // Gerencia Devolucao
-    public void gerenciarDevolucao(Livro livro, Usuario usuario, String dataDevolucao) {
+    public void gerenciarDevolucao(String titulo, String nome, String dataDevolucao) {
         for (Emprestimo emprestimo : emprestimosConcluidos) {
-            if (emprestimo.getLivro().equals(livro) && emprestimo.getUsuario().equals(usuario)) {
-                // emprestimo.calcularMulta(livro, dataDevolucao);
+            // Compara atributos específicos de Livro e Usuario
+            if (emprestimo.getLivro().getTitulo().equals(titulo) &&
+                    emprestimo.getUsuario().getCpf().equals(nome)) {
+
+                // Realiza a devolução
                 emprestimo.devolverLivro();
                 emprestimosConcluidos.remove(emprestimo);
+                System.out.println("Devolução realizada com sucesso!");
 
-                return;
+                return; // Finaliza o método após remover o empréstimo
             }
         }
-        System.out.println("Nenhum emprestimo encontrado!");
+        System.out.println("Nenhum empréstimo encontrado!");
     }
 
 }

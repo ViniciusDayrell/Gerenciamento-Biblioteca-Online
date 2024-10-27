@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import entities.Biblioteca;
 import entities.Bibliotecario;
+import entities.Livro;
 import entities.LivroDigital;
 import entities.LivroFisico;
 import entities.Usuario;
@@ -139,13 +140,72 @@ public class App {
                     break;
 
                 case 3:
+                    System.out.println("----Devolucao----");
+                    System.out.printf("Titulo do livro: ");
+                    String buscaTitulo2 = sc.nextLine();
+                    System.out.printf("CPF do usuario: ");
+                    String cpfUsuario2 = sc.nextLine();
+                    if (biblioteca.buscaLivroPorTitulo(buscaTitulo2) == null) {
+                        System.out.println("Livro nao encontrado! Retornando ao menu...");
+                        break;
+                    } else if (biblioteca.buscaUsuarioCpf(cpfUsuario2) == null) {
+                        System.out.println("Usuario nao encontrado! Retornando ao menu...");
+                        break;
+                    } else {
+                        System.out.printf("Data da devolucao: ");
+                        String dataDevolucao = sc.nextLine();
+                        bibliotecario.gerenciarDevolucao(buscaTitulo2,
+                                cpfUsuario2, dataDevolucao);
+                    }
+                    break;
 
+                case 4:
+                    System.out.println("----Listagens----");
+                    System.out.println("1 - Listar todos os livros");
+                    System.out.println("2 - Listar livros disponiveis");
+                    System.out.println("3 - Listar livros emprestados");
+                    System.out.printf("Escolha uma opcao: ");
+                    int lista = sc.nextInt();
+
+                    switch (lista) {
+                        case 1:
+                            System.out.println("----Livros----");
+                            biblioteca.listarLivros();
+                            break;
+                        case 2:
+                            System.out.println("----Livros disponiveis----");
+                            bibliotecario.mostrarLivrosDisponiveis();
+                            break;
+                        case 3:
+                            System.out.println("----Livros emprestados----");
+                            bibliotecario.mostrarLivrosEmprestados();
+                            break;
+                        default:
+                            System.out.println("Opcao invalida! Retornando ao menu...");
+                            break;
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("----Buscar livro----");
+                    System.out.printf("Nome do livro: ");
+                    String livroBuscado = sc.nextLine();
+
+                    Livro livro = biblioteca.buscaLivroPorTitulo(livroBuscado);
+
+                    if (livro == null) {
+                        System.out.println("Livro nao encontrado!");
+                        break;
+                    } else {
+                        System.out.println("Livro encontrado:");
+                        System.out.println(livro.exibirDetalhes());
+                    }
                     break;
 
                 default:
+                    System.out.println("Opcao invalida! Retornando ao menu...");
                     break;
             }
-
         } while (opcao != 6);
         sc.close();
 

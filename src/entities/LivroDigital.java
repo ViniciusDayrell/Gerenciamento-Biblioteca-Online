@@ -21,7 +21,16 @@ public class LivroDigital extends Livro {
 
     @Override
     public String exibirDetalhes() {
-        return " ";
+        return "Titulo: "
+                + getTitulo()
+                + "Autor: "
+                + getAutor()
+                + "Ano de publicacao: "
+                + getAnoPublicacao()
+                + "Formato: "
+                + getFormato()
+                + "Tamanho: "
+                + getTamanho();
     }
 
 }
