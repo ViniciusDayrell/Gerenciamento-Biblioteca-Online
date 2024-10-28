@@ -23,13 +23,13 @@ public class LivroDigital extends Livro {
     public String exibirDetalhes() {
         return "Titulo: "
                 + getTitulo()
-                + "Autor: "
+                + ", Autor: "
                 + getAutor()
-                + "Ano de publicacao: "
+                + ", Ano de publicacao: "
                 + getAnoPublicacao()
-                + "Formato: "
+                + ", Formato: "
                 + getFormato()
-                + "Tamanho: "
+                + ", Tamanho: "
                 + getTamanho();
     }
 

@@ -1,10 +1,7 @@
 package application;
 
 /*
- * Correção da funcao Devolucao
  * Criar tratamento de erros como:
- * Usuarios iguais nao podem ser cadastrados
- * Usuario nao cadastrado nao pode emprestar nem devolver livro
  * Livros iguais nao podem ser cadastrados
  */
 import java.util.Scanner;
@@ -39,26 +36,32 @@ public class App {
             System.out.println("1 - Cadastros");
             System.out.println("2 - Emprestar livro");
             System.out.println("3 - Devolver livro");
-            System.out.println("4 - Listar livros");
+            System.out.println("4 - Listagens");
             System.out.println("5 - Buscar livros");
             System.out.println("6 - Sair");
             System.out.printf("Escolha uma opcao: ");
             opcao = sc.nextInt();
             sc.nextLine();
+            System.out.println();
 
             switch (opcao) {
                 case 1:
+
                     System.out.println("-------Cadastros-------");
                     System.out.println("1 - Registrar Livros");
                     System.out.println("2 - Cadastrar usuario");
+                    System.out.printf("Escolha uma opcao: ");
                     int cadastro = sc.nextInt();
+                    System.out.println();
 
                     switch (cadastro) {
                         case 1:
                             System.out.println("----Registro Livro----");
                             System.out.println("1 - Livro fisico");
                             System.out.println("2 - Livro digital");
+                            System.out.printf("Escolha uma opcao: ");
                             int tipo = sc.nextInt();
+                            System.out.println();
 
                             switch (tipo) {
                                 case 1:
@@ -116,8 +119,13 @@ public class App {
                             System.out.printf("Senha: ");
                             String senhaUsuario = sc.nextLine();
 
-                            Usuario usuario = new Usuario(nomeUsuario, cpfUsuario, senhaUsuario);
-                            biblioteca.cadastrarUsuario(usuario);
+                            if (biblioteca.buscaUsuarioCpf(cpfUsuario) == null) {
+                                Usuario usuario = new Usuario(nomeUsuario, cpfUsuario, senhaUsuario);
+                                biblioteca.cadastrarUsuario(usuario);
+                            } else {
+                                System.out.println("Usuario ja cadastrado. Retornando ao menu...");
+                                System.out.println();
+                            }
                             break;
 
                         default:
@@ -142,7 +150,8 @@ public class App {
                         System.out.printf("Data do emprestimo: ");
                         String dataEmprestimo = sc.nextLine();
                         bibliotecario.gerenciarEmprestimos(biblioteca.buscaLivroPorTitulo(buscaTitulo),
-                                biblioteca.buscaUsuarioCpf(cpfUsuario), dataEmprestimo);
+                                biblioteca.buscaUsuarioCpf(cpfUsuario), dataEmprestimo, bibliotecario);
+                        System.out.println();
                     }
                     break;
 
@@ -161,32 +170,57 @@ public class App {
                     } else {
                         System.out.printf("Data da devolucao: ");
                         String dataDevolucao = sc.nextLine();
-                        bibliotecario.gerenciarDevolucao2(buscaTitulo2,
-                                cpfUsuario2, dataDevolucao);
+                        bibliotecario.gerenciarDevolucao(buscaTitulo2,
+                                cpfUsuario2, dataDevolucao, bibliotecario);
                     }
                     break;
 
                 case 4:
                     System.out.println("----Listagens----");
-                    System.out.println("1 - Listar todos os livros");
-                    System.out.println("2 - Listar livros disponiveis");
-                    System.out.println("3 - Listar livros emprestados");
+                    System.out.println("1 - Listar livros");
+                    System.out.println("2 - Listar usuarios");
                     System.out.printf("Escolha uma opcao: ");
                     int lista = sc.nextInt();
+                    System.out.println();
 
                     switch (lista) {
                         case 1:
-                            System.out.println("----Livros----");
-                            biblioteca.listarLivros();
+                            System.out.println("----Listar livros----");
+                            System.out.println("1 - Listar todos os livros");
+                            System.out.println("2 - Listar livros disponiveis");
+                            System.out.println("3 - Listar livros emprestados");
+                            System.out.printf("Escolha uma opcao: ");
+                            int listaLivro = sc.nextInt();
+                            System.out.println();
+
+                            switch (listaLivro) {
+                                case 1:
+                                    System.out.println("----Livros----");
+                                    biblioteca.listarLivros();
+                                    break;
+
+                                case 2:
+                                    System.out.println("----Livros disponiveis----");
+                                    bibliotecario.mostrarLivrosDisponiveis();
+                                    System.out.println();
+                                    break;
+
+                                case 3:
+                                    System.out.println("----Livros emprestados----");
+                                    bibliotecario.mostrarLivrosEmprestados();
+                                    System.out.println();
+                                    break;
+
+                                default:
+                                    System.out.println("Opcao invalida! Retornando ao menu...");
+                                    break;
+                            }
                             break;
                         case 2:
-                            System.out.println("----Livros disponiveis----");
-                            bibliotecario.mostrarLivrosDisponiveis();
+                            System.out.println("----Listar Usuarios----");
+                            biblioteca.listarUsuarios();
                             break;
-                        case 3:
-                            System.out.println("----Livros emprestados----");
-                            bibliotecario.mostrarLivrosEmprestados();
-                            break;
+
                         default:
                             System.out.println("Opcao invalida! Retornando ao menu...");
                             break;
@@ -202,10 +236,12 @@ public class App {
 
                     if (livro == null) {
                         System.out.println("Livro nao encontrado!");
+                        System.out.println();
                         break;
                     } else {
                         System.out.println("Livro encontrado:");
                         System.out.println(livro.exibirDetalhes());
+                        System.out.println();
                     }
                     break;
 

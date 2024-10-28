@@ -2,7 +2,6 @@ package entities;
 
 import interfaces.IDevolucao;
 import interfaces.IEmprestimo;
-//import java.time.LocalDate;
 
 public class Emprestimo implements IEmprestimo, IDevolucao {
     private Livro livro;
@@ -33,19 +32,9 @@ public class Emprestimo implements IEmprestimo, IDevolucao {
         return dataDevolucao;
     }
 
-    /*
-     * Metodo para calcular multa para o usuario
-     * Livro fisico deve ser devolvido em ate 15 dias
-     * Apos esse periodo, multa de R$2,00 por dia
-     */
-    /*
-     * public void calcularMulta(Livro livro, String dataDevolucao) {
-     * if (livro instanceof LivroFisico) {
-     * LocalDate d01 = LocalDate.parse(dataEmprestimo);
-     * LocalDate d02 = LocalDate.parse(dataDevolucao);
-     * }
-     * }
-     */
+    public String tituloLivro() {
+        return livro.getTitulo();
+    }
 
     @Override
     public void realizarEmprestimo() {
@@ -54,14 +43,18 @@ public class Emprestimo implements IEmprestimo, IDevolucao {
     }
 
     @Override
-    public void cancelarEmprestimo() {
-
-    }
-
-    @Override
     public void devolverLivro() {
         livro.setDisponivel(true);
         System.out.println("Livro devolvido com sucesso!");
+    }
+
+    public void exibirDetalhesEmprestimo() {
+        System.out.println("Livro "
+                + tituloLivro()
+                + ", emprestado a "
+                + getUsuario()
+                + ", no dia "
+                + getDataEmprestimo());
     }
 
 }

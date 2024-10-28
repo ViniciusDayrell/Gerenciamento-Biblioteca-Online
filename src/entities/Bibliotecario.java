@@ -24,21 +24,29 @@ public class Bibliotecario extends Usuario {
     }
 
     public void mostrarLivrosEmprestados() {
-        biblioteca.listarLivrosEmprestados();
+        if (emprestimosConcluidos.isEmpty()) {
+            System.out.println("Nenhum livro está emprestado no momento.");
+        } else {
+            for (Emprestimo emprestimo : emprestimosConcluidos) {
+                emprestimo.exibirDetalhesEmprestimo();
+            }
+        }
     }
 
     // Gerencia emprestimos
-    public void gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo) {
+    public void gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo, Bibliotecario bibliotecario) {
         if (livro.isDisponivel()) {
             Emprestimo emprestimo = new Emprestimo(livro, usuario, dataEmprestimo);
             emprestimo.realizarEmprestimo();
             emprestimosConcluidos.add(emprestimo);
+            System.out.println("Livro " + livro.getTitulo() + " foi emprestado a " + usuario.getNome()
+                    + ". Gerenciado por " + bibliotecario.getNome());
         } else {
             System.out.println("O livro nao esta disponivel!");
         }
     }
 
-    public void gerenciarDevolucao2(String titulo, String cpf, String dataDevolucao) {
+    public void gerenciarDevolucao(String titulo, String cpf, String dataDevolucao, Bibliotecario bibliotecario) {
         Livro livro = biblioteca.buscaLivroPorTitulo(titulo);
         Usuario usuario = biblioteca.buscaUsuarioCpf(cpf);
         if (livro == null) {
@@ -55,6 +63,8 @@ public class Bibliotecario extends Usuario {
             if (emprestimo.getLivro().equals(livro)) {
                 emprestimo.devolverLivro();
                 emprestimosConcluidos.remove(emprestimo);
+                System.out.println("Livro " + livro.getTitulo() + " foi devolvido por " + usuario.getNome()
+                        + ". Gerenciado por " + bibliotecario.getNome());
                 return;
             }
         }

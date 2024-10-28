@@ -19,17 +19,18 @@ public class Biblioteca {
 
     protected void registrarLivro(Livro livro) {
         livros.add(livro);
-        System.out.println("Livro registrado com sucesso!");
+        System.out.println("Livro " + livro.getTitulo() + " registrado com sucesso!");
+        System.out.println();
     }
 
     public void cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);
-        System.out.println("Usuario cadastrado com sucesso!");
+        System.out.println("Usuario " + usuario.getNome() + " cadastrado com sucesso!");
     }
 
     public Livro buscaLivroPorTitulo(String titulo) {
         for (Livro livro : livros) {
-            if (livro.getTitulo().equals(titulo)) {
+            if (livro.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
                 return livro;
             }
         }
@@ -53,7 +54,11 @@ public class Biblioteca {
         boolean existemLivrosDigitais = false;
         boolean existemLivrosFisicos = false;
 
-        // Verifica se existem livros de cada tipo
+        if (listaVazia()) {
+            System.out.println("Nao existem livros no catalago.");
+            return;
+        }
+
         for (Livro livro : livros) {
             if (livro instanceof LivroDigital) {
                 existemLivrosDigitais = true;
@@ -68,7 +73,6 @@ public class Biblioteca {
             }
         }
 
-        // Faz a listagem dos livros caso existam
         if (existemLivrosDigitais) {
             System.out.println("Livros Digitais:");
             for (Livro livro : livros) {
@@ -102,23 +106,28 @@ public class Biblioteca {
         }
         if (!algumDisponivel) {
             System.out.println("Nenhum livro esta disponivel no momento.");
+            System.out.println();
         }
     }
 
-    protected void listarLivrosEmprestados() {
-        boolean algumEmprestado = false;
-
-        for (Livro livro : livros) {
-            if (!livro.isDisponivel()) {
-                System.out.println(livro.exibirDetalhes());
-                System.out.println();
-                algumEmprestado = true;
+    public void listarUsuarios() {
+        boolean existemUsuariosCadastrados = false;
+        for (Usuario usuario : usuarios) {
+            if (!(usuario instanceof Bibliotecario)) {
+                existemUsuariosCadastrados = true;
+                break;
             }
         }
 
-        if (!algumEmprestado) {
-            System.out.println("Nenhum livro está emprestado no momento.");
-            System.out.println();
+        if (existemUsuariosCadastrados) {
+            for (Usuario usuario : usuarios) {
+                if (!(usuario instanceof Bibliotecario)) {
+                    System.out.println(usuario.toString());
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("Nenhum usuario cadastrado.");
         }
     }
 }
