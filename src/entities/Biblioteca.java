@@ -1,7 +1,13 @@
 package entities;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 public class Biblioteca {
     private List<Livro> livros;
@@ -17,15 +23,23 @@ public class Biblioteca {
         this.usuarios = usuarios;
     }
 
-    protected void registrarLivro(Livro livro) {
-        livros.add(livro);
-        System.out.println("Livro " + livro.getTitulo() + " registrado com sucesso!");
-        System.out.println();
+    public List<Livro> getLivros() {
+        return this.livros;
     }
 
-    public void cadastrarUsuario(Usuario usuario) {
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    protected String registrarLivro(Livro livro) {
+        livros.add(livro);
+        return "Livro " + livro.getTitulo() + " registrado com sucesso!";
+
+    }
+
+    public String cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);
-        System.out.println("Usuario " + usuario.getNome() + " cadastrado com sucesso!");
+        return "Usuario " + usuario.getNome() + " cadastrado com sucesso!";
     }
 
     public Livro buscaLivroPorTitulo(String titulo) {
@@ -50,13 +64,13 @@ public class Biblioteca {
         return livros.isEmpty();
     }
 
-    public void listarLivros() {
+    public String listarLivros() {
+        StringBuilder detalhes = new StringBuilder();
         boolean existemLivrosDigitais = false;
         boolean existemLivrosFisicos = false;
 
         if (listaVazia()) {
-            System.out.println("Nao existem livros no catalago.");
-            return;
+            return "Nao existem livros no catalago.";
         }
 
         for (Livro livro : livros) {
@@ -74,44 +88,46 @@ public class Biblioteca {
         }
 
         if (existemLivrosDigitais) {
-            System.out.println("Livros Digitais:");
+            detalhes.append("Livros Digitais:\n");
             for (Livro livro : livros) {
                 if (livro instanceof LivroDigital) {
-                    System.out.println(livro.exibirDetalhes());
-                    System.out.println();
+                    detalhes.append(livro.exibirDetalhes()).append("\n\n");
                 }
             }
         }
 
         if (existemLivrosFisicos) {
-            System.out.println("Livros Fisicos:");
+            detalhes.append("Livros Fisicos:\n");
             for (Livro livro : livros) {
                 if (livro instanceof LivroFisico) {
-                    System.out.println(livro.exibirDetalhes());
-                    System.out.println();
+                    detalhes.append(livro.exibirDetalhes()).append("\n\n");
                 }
             }
         }
+        return detalhes.toString();
     }
 
-    protected void listarLivrosDisponiveis() {
+    public String listarLivrosDisponiveis() {
+        StringBuilder detalhes = new StringBuilder();
         boolean algumDisponivel = false;
 
         for (Livro livro : livros) {
             if (livro.isDisponivel()) {
-                System.out.println(livro.exibirDetalhes());
-                System.out.println();
+                detalhes.append(livro.exibirDetalhes()).append("\n\n");
                 algumDisponivel = true;
             }
         }
         if (!algumDisponivel) {
-            System.out.println("Nenhum livro esta disponivel no momento.");
-            System.out.println();
+            return "Nenhum livro esta disponivel no momento.";
         }
+
+        return detalhes.toString();
     }
 
-    public void listarUsuarios() {
+    public String listarUsuarios() {
+        StringBuilder detalhes = new StringBuilder();
         boolean existemUsuariosCadastrados = false;
+
         for (Usuario usuario : usuarios) {
             if (!(usuario instanceof Bibliotecario)) {
                 existemUsuariosCadastrados = true;
@@ -119,15 +135,71 @@ public class Biblioteca {
             }
         }
 
-        if (existemUsuariosCadastrados) {
-            for (Usuario usuario : usuarios) {
-                if (!(usuario instanceof Bibliotecario)) {
-                    System.out.println(usuario.toString());
-                    System.out.println();
-                }
+        if (!existemUsuariosCadastrados) {
+            return "Nenhum usuario cadastrado.";
+        }
+
+        for (Usuario usuario : usuarios) {
+            if (!(usuario instanceof Bibliotecario)) {
+                detalhes.append(usuario.toString()).append("\n\n");
             }
-        } else {
-            System.out.println("Nenhum usuario cadastrado.");
+        }
+
+        return detalhes.toString();
+    }
+
+    public void salvarUsuarios() throws IOException {
+        if (usuarios == null) {
+            usuarios = new ArrayList<>();
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.bin"))) {
+            oos.writeObject(usuarios);
         }
     }
+
+    public void carregarUsuarios() throws IOException, ClassNotFoundException {
+        File arquivo = new File("usuarios.bin");
+
+        if (!arquivo.exists()) {
+            usuarios = new ArrayList<>();
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arquivo))) {
+            Object obj = ois.readObject();
+            if (obj instanceof List<?>) {
+                usuarios = (List<Usuario>) obj;
+            } else {
+                usuarios = new ArrayList<>();
+            }
+        }
+    }
+
+    public void salvarLivros() throws IOException {
+        if (livros == null) {
+            livros = new ArrayList<>();
+        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("livros.bin"))) {
+            oos.writeObject(livros);
+        }
+    }
+
+    public void carregarLivros() throws IOException, ClassNotFoundException {
+        File arquivo = new File("livros.bin");
+
+        if (!arquivo.exists()) {
+            livros = new ArrayList<>();
+            return;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arquivo))) {
+            Object obj = ois.readObject();
+            if (obj instanceof List<?>) {
+                livros = (List<Livro>) obj;
+            } else {
+                livros = new ArrayList<>();
+            }
+        }
+    }
+
 }

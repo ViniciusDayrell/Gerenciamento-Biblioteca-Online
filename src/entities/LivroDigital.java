@@ -1,8 +1,10 @@
 package entities;
 
 public class LivroDigital extends Livro {
-    private String formato;
-    private int tamanho;
+    private static final long serialVersionUID = 1L;
+
+    private transient String formato;
+    private transient int tamanho;
 
     public LivroDigital(String titulo, String autor, int anoPublicacao, String formato,
             int tamanho) {

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Bibliotecario extends Usuario {
-    private List<Emprestimo> emprestimosConcluidos;
-    private Biblioteca biblioteca;
+    private static final long serialVersionUID = 1L;
+
+    private transient List<Emprestimo> emprestimosConcluidos;
+    private transient Biblioteca biblioteca;
 
     public Bibliotecario(String nome, String cpf, String senha, Biblioteca biblioteca) {
         super(nome, cpf, senha);
@@ -13,62 +15,58 @@ public class Bibliotecario extends Usuario {
         this.biblioteca = biblioteca;
     }
 
-    // Cadastro de livros
-    public void cadastraLivros(Livro livro) {
-        biblioteca.registrarLivro(livro);
+    public String cadastraLivros(Livro livro) {
+        String mensagem = biblioteca.registrarLivro(livro);
+        return mensagem;
     }
 
-    // Mostra os status dos livros
-    public void mostrarLivrosDisponiveis() {
-        biblioteca.listarLivrosDisponiveis();
-    }
+    public String mostrarLivrosEmprestados() {
+        StringBuilder detalhes = new StringBuilder();
 
-    public void mostrarLivrosEmprestados() {
         if (emprestimosConcluidos.isEmpty()) {
-            System.out.println("Nenhum livro está emprestado no momento.");
+            return "Nenhum livro está emprestado no momento.";
         } else {
+            detalhes.append("Livros Emprestados:\n");
             for (Emprestimo emprestimo : emprestimosConcluidos) {
-                emprestimo.exibirDetalhesEmprestimo();
+                detalhes.append(emprestimo.exibirDetalhesEmprestimo()).append("\n\n");
             }
         }
+        return detalhes.toString();
     }
 
-    // Gerencia emprestimos
-    public void gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo, Bibliotecario bibliotecario) {
+    public String gerenciarEmprestimos(Livro livro, Usuario usuario, String dataEmprestimo,
+            Bibliotecario bibliotecario) {
         if (livro.isDisponivel()) {
             Emprestimo emprestimo = new Emprestimo(livro, usuario, dataEmprestimo);
             emprestimo.realizarEmprestimo();
             emprestimosConcluidos.add(emprestimo);
-            System.out.println("Livro " + livro.getTitulo() + " foi emprestado a " + usuario.getNome()
-                    + ". Gerenciado por " + bibliotecario.getNome());
+            return "Livro " + livro.getTitulo() + " foi emprestado a " + usuario.getNome()
+                    + ". Gerenciado por " + bibliotecario.getNome();
         } else {
-            System.out.println("O livro nao esta disponivel!");
+            return "O livro nao esta disponivel!";
         }
     }
 
-    public void gerenciarDevolucao(String titulo, String cpf, String dataDevolucao, Bibliotecario bibliotecario) {
+    public String gerenciarDevolucao(String titulo, String cpf, String dataDevolucao, Bibliotecario bibliotecario) {
         Livro livro = biblioteca.buscaLivroPorTitulo(titulo);
         Usuario usuario = biblioteca.buscaUsuarioCpf(cpf);
         if (livro == null) {
-            System.out.println("Livro nao encontrado no catalago.");
-            return;
+            return "Livro nao encontrado no catalago.";
         }
 
         if (usuario == null) {
-            System.out.println("Usuario nao encontrado.");
-            return;
+            return "Usuario nao encontrado.";
         }
 
         for (Emprestimo emprestimo : emprestimosConcluidos) {
             if (emprestimo.getLivro().equals(livro)) {
                 emprestimo.devolverLivro();
                 emprestimosConcluidos.remove(emprestimo);
-                System.out.println("Livro " + livro.getTitulo() + " foi devolvido por " + usuario.getNome()
-                        + ". Gerenciado por " + bibliotecario.getNome());
-                return;
+                return "Livro " + livro.getTitulo() + " foi devolvido por " + usuario.getNome()
+                        + ". Gerenciado por " + bibliotecario.getNome();
             }
         }
-        System.out.println("Nenhum empréstimo encontrado!");
+        return "Nenhum empréstimo encontrado!";
     }
 
 }

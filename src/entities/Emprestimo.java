@@ -39,22 +39,20 @@ public class Emprestimo implements IEmprestimo, IDevolucao {
     @Override
     public void realizarEmprestimo() {
         livro.setDisponivel(false);
-        System.out.println("Emprestimo realizado com sucesso!");
     }
 
     @Override
     public void devolverLivro() {
         livro.setDisponivel(true);
-        System.out.println("Livro devolvido com sucesso!");
     }
 
-    public void exibirDetalhesEmprestimo() {
-        System.out.println("Livro "
+    public String exibirDetalhesEmprestimo() {
+        return "Livro "
                 + tituloLivro()
                 + ", emprestado a "
                 + getUsuario()
                 + ", no dia "
-                + getDataEmprestimo());
+                + getDataEmprestimo();
     }
 
 }

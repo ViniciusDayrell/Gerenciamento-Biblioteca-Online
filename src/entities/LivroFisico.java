@@ -1,6 +1,8 @@
 package entities;
 
 public class LivroFisico extends Livro {
+    private static final long serialVersionUID = 1L;
+
     private int estante;
     private int pratileira;
 

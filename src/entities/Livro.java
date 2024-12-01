@@ -1,6 +1,10 @@
 package entities;
 
-public abstract class Livro {
+import java.io.Serializable;
+
+public abstract class Livro implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String titulo;
     private String autor;
     private int anoPublicacao;
